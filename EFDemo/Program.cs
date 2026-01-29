@@ -24,16 +24,16 @@ namespace EFDemo
 
             GetActors(context, "Collins");
 
-            //UpdateActor(context, actorId);
+            UpdateActor(context, actorId);
+
+            GetActors(context, "NewLastName");
 
             DeleteActor(context, actorId);
-
-            Console.WriteLine("Done.");
         }
 
         static void GetActors(PagilaContext context)
         {
-            Console.WriteLine("Actors:");
+            Console.WriteLine("First 5 Actors:");
 
             var actors = context.Actors
                 .OrderBy(a => a.ActorId)
@@ -50,7 +50,7 @@ namespace EFDemo
 
         static void GetActors(PagilaContext context, string lastName)
         {
-            Console.WriteLine("Actors:");
+            Console.WriteLine($"Actors with last name of {lastName}:");
 
             var actors = context.Actors
                 .Where(a => a.LastName == lastName)
@@ -78,6 +78,8 @@ namespace EFDemo
             context.SaveChanges();
 
             Console.WriteLine($"Inserted actor with ID {actor.ActorId}");
+            Console.WriteLine();
+
             return actor.ActorId;
         }
 
@@ -92,6 +94,8 @@ namespace EFDemo
 
                 context.SaveChanges();
                 Console.WriteLine($"Updated actor {actorId}");
+
+                Console.WriteLine();
             }
         }
 
