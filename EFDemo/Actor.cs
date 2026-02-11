@@ -7,6 +7,6 @@
         public string LastName { get; set; } = "";
         public DateTime LastUpdate { get; set; }
 
-        public ICollection<Film> Films { get; set; } = new List<Film>();
+        public ICollection<Film> Films { get; set; } = new List<Film>(); // navigation property
     }
 }
