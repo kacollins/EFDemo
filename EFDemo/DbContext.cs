@@ -64,6 +64,10 @@ namespace EFDemo
                       .HasColumnName("language_id")
                       .IsRequired();
 
+                entity.Property(f => f.Rating)
+                      .HasColumnName("rating")
+                      .IsRequired();
+
                 entity.Property(f => f.LastUpdate)
                       .HasColumnName("last_update")
                       .HasDefaultValueSql("now()");

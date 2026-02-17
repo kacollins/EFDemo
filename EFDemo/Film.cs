@@ -9,6 +9,7 @@
 
         public int ReleaseYear { get; set; }
         public int LanguageId { get; set; } = 1;
+        public string Rating { get; set; } = "";
         public DateTime LastUpdate { get; set; }
 
         public ICollection<Actor> Actors { get; set; } = new List<Actor>();

@@ -30,11 +30,28 @@ namespace EFDemo
             //GetActors(context, "Collins");
             //GetFilms(context, DateTime.Today.Year);
 
-            WriteToCSV(context);
-            ReadFromCSV();
+            GetFilmCountByRating(context);
+
+            WriteActorsToCSV(context);
+            ReadActorsFromCSV();
         }
 
-        private static void WriteToCSV(PagilaContext context)
+        private static void GetFilmCountByRating(PagilaContext context)
+        {
+            var filmCountByRating = context.Films
+                                            .GroupBy(f => f.Rating)
+                                            .ToDictionary(
+                                                g => g.Key,
+                                                g => g.Count()
+                                            );
+
+            foreach (var item in filmCountByRating)
+            {
+                Console.WriteLine(item);
+            }
+        }
+
+        private static void WriteActorsToCSV(PagilaContext context)
         {
             using var writer = new StreamWriter("actors.csv");
             using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
@@ -43,7 +60,7 @@ namespace EFDemo
             csv.WriteRecords(actors);
         }
 
-        private static void ReadFromCSV()
+        private static void ReadActorsFromCSV()
         {
             using var reader = new StreamReader("actors.csv");
             using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
