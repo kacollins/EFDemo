@@ -26,7 +26,7 @@ namespace EFDemo
             InsertFilmActor(context, actorId, sequelId);
 
             GetActors(context, "Collins");
-            GetFilms(context, 2026);
+            GetFilms(context, DateTime.Today.Year);
         }
 
         static void GetActors(PagilaContext context)
@@ -90,9 +90,9 @@ namespace EFDemo
             Console.WriteLine($"Films released in {releaseYear}:");
 
             var films = context.Films
-                .Include(a => a.Actors)
-                .Where(a => a.ReleaseYear == releaseYear)
-                .OrderBy(a => a.FilmId)
+                .Include(f => f.Actors)
+                .Where(f => f.ReleaseYear == releaseYear)
+                .OrderBy(f => f.FilmId)
                 .ToList();
 
             foreach (var film in films)
@@ -109,7 +109,7 @@ namespace EFDemo
             {
                 Title = title,
                 Description = null, //Example of inserting NULL value
-                ReleaseYear = 2026
+                ReleaseYear = DateTime.Today.Year
             };
 
             context.Films.Add(film);
