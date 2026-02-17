@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CsvHelper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.Globalization;
 
 namespace EFDemo
 {
@@ -18,15 +20,40 @@ namespace EFDemo
 
             using var context = new PagilaContext(options);
 
-            int actorId = InsertActor(context, "Kimberly", "Collins");
-            int filmId = InsertFilm(context, "Kimberly's Film");
-            int sequelId = InsertFilm(context, "Kimberly's Film - The Sequel");
-            InsertFilmActor(context, actorId, filmId);
-            InsertFilmActor(context, actorId, sequelId);
-            InsertFilmActor(context, actorId, sequelId);
+            //int actorId = InsertActor(context, "Kimberly", "Collins");
+            //int filmId = InsertFilm(context, "Kimberly's Film");
+            //int sequelId = InsertFilm(context, "Kimberly's Film - The Sequel");
+            //InsertFilmActor(context, actorId, filmId);
+            //InsertFilmActor(context, actorId, sequelId);
+            //InsertFilmActor(context, actorId, sequelId);
 
-            GetActors(context, "Collins");
-            GetFilms(context, DateTime.Today.Year);
+            //GetActors(context, "Collins");
+            //GetFilms(context, DateTime.Today.Year);
+
+            WriteToCSV(context);
+            ReadFromCSV();
+        }
+
+        private static void WriteToCSV(PagilaContext context)
+        {
+            using var writer = new StreamWriter("actors.csv");
+            using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+
+            var actors = context.Actors.Take(5);
+            csv.WriteRecords(actors);
+        }
+
+        private static void ReadFromCSV()
+        {
+            using var reader = new StreamReader("actors.csv");
+            using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+
+            var actors = csv.GetRecords<Actor>().ToList();
+
+            foreach (var actor in actors)
+            {
+                Console.WriteLine($"{actor.ActorId}: {actor.FirstName} {actor.LastName}");
+            }
         }
 
         static void GetActors(PagilaContext context)
