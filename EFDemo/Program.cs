@@ -27,9 +27,39 @@ namespace EFDemo
             //WriteActorsToCSV(context, headers);
             //ReadActorsFromCSV(headers);
 
-            GetSalesByFilmCategory(context);
+            //GetSalesByFilmCategory(context);
 
-            GetLastDayOfCurrentMonth(context);
+            //GetLastDayOfCurrentMonth(context);
+
+            PrintActorReport(context);
+        }
+
+        private static void PrintActorReport(PagilaContext context)
+        {
+            int pageSize = 20;
+            int totalActors = context.Actors.Count();
+            int totalPages = (int)Math.Ceiling(totalActors / (double)pageSize);
+
+            for (int i = 1; i <= totalPages; i++)
+            {
+                PrintActorReportPage(context, i, pageSize);
+            }
+        }
+
+        private static void PrintActorReportPage(PagilaContext context, int pageNumber, int pageSize)
+        {
+            var results = context.Actors
+                                    .Include(a => a.Films)
+                                    .OrderBy(a => a.LastName)
+                                    .ThenBy(a => a.FirstName)
+                                    .Skip((pageNumber - 1) * pageSize)
+                                    .Take(pageSize)
+                                    .ToList();
+
+            foreach (var result in results)
+            {
+                Console.WriteLine($"{result.FirstName} {result.LastName} ({result.Films.Count} films)");
+            }
         }
 
         private static void GetLastDayOfCurrentMonth(PagilaContext context)
